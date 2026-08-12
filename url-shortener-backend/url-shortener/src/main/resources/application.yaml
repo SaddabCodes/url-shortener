@@ -10,3 +10,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+  jwt:
+    secret: b603fafc39f3dd71bb0e4ef7feeada87b16f70df8037aca88a4ced01cb229289
+    expiration: 172800000

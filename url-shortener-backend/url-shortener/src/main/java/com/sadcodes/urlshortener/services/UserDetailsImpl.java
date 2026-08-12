@@ -1,4 +1,4 @@
-package com.sadcodes.urlshortener.service;
+package com.sadcodes.urlshortener.services;
 
 import com.sadcodes.urlshortener.model.User;
 import lombok.AllArgsConstructor;
