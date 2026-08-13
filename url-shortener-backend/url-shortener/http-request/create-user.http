@@ -1,0 +1,10 @@
+# CREATE USER
+
+POST http://localhost:8080/api/auth/public/register
+Content-Type: application/json
+
+{
+  "username": "sad",
+  "password": "1234",
+  "email": "saddab@gmail.com"
+}
