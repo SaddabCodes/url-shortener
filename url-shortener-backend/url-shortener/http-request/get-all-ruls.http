@@ -1,0 +1,5 @@
+
+GET http://localhost:8080/api/urls/myurls
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYWQiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlhdCI6MTc4OTcyMzg3NywiZXhwIjoxNzg5ODk2Njc3fQ._a_sl29D8H0ML42td_asi5zqm7wuvWZtDoPtU0_AxDVVERYflskHBu0txp0M3eBd
+
+

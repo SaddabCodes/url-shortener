@@ -1,0 +1,11 @@
+### GET SHORT URL
+
+POST http://localhost:8080/api/urls/shorted
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYWQiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlhdCI6MTc4Nzc0MDQwNCwiZXhwIjoxNzg3OTEzMjA0fQ.FvEtjlCkH8BmXwUMmCsYWYpLG_APvp94eyc4LUA72qkc4_BDa1f7BPVluRUgCP4a
+Content-Type: application/json
+
+{
+  "originalUrl": "https://www.example.com/very/long/url/here"
+}
+
+
