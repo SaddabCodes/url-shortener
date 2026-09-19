@@ -1,0 +1,6 @@
+
+GET http://localhost:8080/api/urls/totalClicks?startDate=2026-01-01&endDate=2026-09-19
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYWQiLCJyb2xlcyI6IlJPTEVfVVNFUiIsImlhdCI6MTc4OTgxMTk1OCwiZXhwIjoxNzg5OTg0NzU4fQ.FX1aKsoOohwLz2wsDirRaNpvp-hkmzvLEjptTg5gcYoMEetY-imSjqCHO_bIa_3g
+
+
+
