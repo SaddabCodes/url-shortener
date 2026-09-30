@@ -3,11 +3,13 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/api";
+import { useStoreContext } from "../contextApi/ContextApi";
 import TextField from "./TextFiled";
 
 function Login() {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
+  const { setToken } = useStoreContext();
 
   const loginHandler = async (data) => {
     setLoader(true);
@@ -16,6 +18,7 @@ function Login() {
       const { data: response } = await api.post("/api/auth/public/login", data);
       // Store the token in Local Storage
       // console.log(response.token)
+      setToken(response.token);
       localStorage.setItem("JWT_TOKEN", JSON.stringify(response.token));
       toast.success("Login Successful!");
       reset();

@@ -1,5 +1,8 @@
 import { createContext, useContext, useState } from "react";
 
+// This file intentionally exports the React context, provider, and hook.
+// Fast refresh is disabled because the context is shared across modules.
+// eslint-disable-next-line react-refresh/only-export-components
 const ContextApi = createContext();
 
 export const ContextProvider = ({ children }) => {
