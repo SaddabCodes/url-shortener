@@ -1,12 +1,33 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../api/api";
 import TextField from "./TextFiled";
+import {toast} from "react-hot-toast"
 
 function RegisterPage() {
-  const [loader,setLoader] = useState(false);
+  const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
 
-  const registerHandler = async (data) => {};
+  const registerHandler = async (data) => {
+    setLoader(true);
+
+    try {
+      const { data: response } = await api.post(
+        "/api/auth/public/register",
+        data,
+      );
+      reset();
+      navigate("/login");
+      toast.success("Registration Successful!")
+      
+    } catch (error) {
+      console.log(error);
+      toast.error("Registration Failed!");
+    } finally {
+      setLoader(false);
+    }
+  };
   const {
     register,
     handleSubmit,

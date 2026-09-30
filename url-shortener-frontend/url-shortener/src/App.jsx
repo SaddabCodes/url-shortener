@@ -6,12 +6,14 @@ import Footer from "./components/Footer";
 import LandingPage from "./components/LandingPage";
 import Navbar from "./components/Navbar";
 import RegisterPage from "./components/RegisterPage";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   return (
     <div>
       <Router>
         <Navbar />
+        <Toaster position="bottom-center"/>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<AboutPage />} />
