@@ -16,4 +16,4 @@ spring:
     expiration: 172800000
 
   frontend:
-    url: http://localhost:5173/
+    url: http://localhost:5173
