@@ -6,7 +6,7 @@ import api from "../api/api";
 import { useStoreContext } from "../contextApi/ContextApi";
 import TextField from "./TextFiled";
 
-function Login() {
+export default function LoginPage() {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const { setToken } = useStoreContext();
@@ -22,7 +22,7 @@ function Login() {
       localStorage.setItem("JWT_TOKEN", JSON.stringify(response.token));
       toast.success("Login Successful!");
       reset();
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
       toast.error("Login Failed!");
@@ -102,4 +102,3 @@ function Login() {
   );
 }
 
-export default Login;
