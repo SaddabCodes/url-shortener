@@ -1,22 +1,24 @@
+import { useState } from "react";
 import { useStoreContext } from "../../contextApi/ContextApi";
 import { useFetchTotalClicks } from "../../hooks/useQuery";
 import Graph from "./Graph";
+import ShortenPopUp from "./ShortenPopUp";
 
 export default function DashboardLayout() {
+  const refetch = false;
   const { token } = useStoreContext();
 
   const {
     isLoading: loader,
     data: totalClicks = [],
     isError,
-  } = useFetchTotalClicks(
-    token,
-    onError,
-  );
+  } = useFetchTotalClicks(token, onError);
 
   function onError() {
     console.error("Unable to load click analytics");
   }
+
+  const [shortenPopUp, setShortenPopUp] = useState(false);
 
   return (
     <div className="lg:px-14 sm:px-8 px-4 min-h-[calc(100vh-64px)]">
@@ -43,12 +45,21 @@ export default function DashboardLayout() {
           </div>
 
           <div className="py-5 sm:text-end text-center">
-            <button className="bg-custom-gradient px-4 py-2 rounded-md text-white">
+                <button
+                  className="bg-custom-gradient px-4 py-2 rounded-md text-white cursor-pointer transition-all duration-200 hover:brightness-110 hover:scale-105 hover:shadow-lg active:scale-95"
+                  onClick={() => setShortenPopUp(true)}
+                >
               Create a New Short URL
             </button>
           </div>
         </div>
       )}
+
+      <ShortenPopUp
+      refetch={refetch}
+        open={shortenPopUp}
+        setOpen={setShortenPopUp}
+      />
     </div>
   );
 }
