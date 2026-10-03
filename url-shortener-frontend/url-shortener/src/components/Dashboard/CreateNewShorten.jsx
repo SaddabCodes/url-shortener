@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useStoreContext } from "../../contextApi/ContextApi";
-import { useForm } from "react-hook-form";
-import TextField from "../TextFiled";
 import { Tooltip } from "@mui/material";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 import api from "../../api/api";
-import toast from "react-hot-toast";
+import { useStoreContext } from "../../contextApi/ContextApi";
+import TextField from "../TextFiled";
 
 const CreateNewShorten = ({ setOpen, refetch }) => {
   const { token } = useStoreContext();
@@ -34,7 +34,7 @@ const CreateNewShorten = ({ setOpen, refetch }) => {
         },
       });
 
-      const shortenUrl = `${import.meta.env.VITE_REACT_FRONT_END_URL + "/s/" + `${res.shortUrl}`}`;
+      const shortenUrl = `${import.meta.env.VITE_REACT_SUBDOMAIN + "/s/" + `${res.shortUrl}`}`;
       navigator.clipboard.writeText(shortenUrl).then(() => {
         toast.success("Short URL Copied to Clipboard", {
           position: "bottom-center",
@@ -43,7 +43,7 @@ const CreateNewShorten = ({ setOpen, refetch }) => {
         });
       });
 
-      // await refetch();
+      await refetch();
       reset();
       setOpen(false);
     } catch (error) {

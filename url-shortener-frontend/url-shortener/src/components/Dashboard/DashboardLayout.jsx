@@ -1,31 +1,41 @@
-import { useState } from "react";
-import { useStoreContext } from "../../contextApi/ContextApi";
-import { useFetchTotalClicks } from "../../hooks/useQuery";
+import React, { useState } from "react";
 import Graph from "./Graph";
+import { dummyData } from "../../dummyData/data";
+import { useStoreContext } from "../../contextApi/ContextApi";
+import { useFetchMyShortUrls, useFetchTotalClicks } from "../../hooks/useQuery";
 import ShortenPopUp from "./ShortenPopUp";
+import { FaLink } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import Loader from "../Loader";
+import ShortenUrlList from "./ShortenUrlList";
 
-export default function DashboardLayout() {
-  const refetch = false;
+const DashboardLayout = () => {
+  // const refetch = false;
   const { token } = useStoreContext();
+  const navigate = useNavigate();
+  const [shortenPopUp, setShortenPopUp] = useState(false);
+
+  // console.log(useFetchTotalClicks(token, onError));
 
   const {
-    isLoading: loader,
-    data: totalClicks = [],
-    isError,
-  } = useFetchTotalClicks(token, onError);
+    isLoading,
+    data: myShortenUrls = [],
+    refetch,
+  } = useFetchMyShortUrls(token, onError);
+
+  const { isLoading: loader, data: totalClicks = [] } = useFetchTotalClicks(
+    token,
+    onError,
+  );
 
   function onError() {
-    console.error("Unable to load click analytics");
+    navigate("/error");
   }
-
-  const [shortenPopUp, setShortenPopUp] = useState(false);
 
   return (
     <div className="lg:px-14 sm:px-8 px-4 min-h-[calc(100vh-64px)]">
       {loader ? (
-        <p>Loading...</p>
-      ) : isError ? (
-        <p>Unable to load click analytics.</p>
+        <Loader />
       ) : (
         <div className="lg:w-[90%] w-full mx-auto py-16">
           <div className=" h-96 relative ">
@@ -40,26 +50,41 @@ export default function DashboardLayout() {
                 </h3>
               </div>
             )}
-
             <Graph graphData={totalClicks} />
           </div>
-
           <div className="py-5 sm:text-end text-center">
-                <button
-                  className="bg-custom-gradient px-4 py-2 rounded-md text-white cursor-pointer transition-all duration-200 hover:brightness-110 hover:scale-105 hover:shadow-lg active:scale-95"
-                  onClick={() => setShortenPopUp(true)}
-                >
+            <button
+              className="bg-custom-gradient px-4 py-2 rounded-md text-white"
+              onClick={() => setShortenPopUp(true)}
+            >
               Create a New Short URL
             </button>
+          </div>
+
+          <div>
+            {!isLoading && myShortenUrls.length === 0 ? (
+              <div className="flex justify-center pt-16">
+                <div className="flex gap-2 items-center justify-center  py-6 sm:px-8 px-5 rounded-md   shadow-lg  bg-gray-50">
+                  <h1 className="text-slate-800 font-montserrat   sm:text-[18px] text-[14px] font-semibold mb-1 ">
+                    You haven't created any short link yet
+                  </h1>
+                  <FaLink className="text-blue-500 sm:text-xl text-sm " />
+                </div>
+              </div>
+            ) : (
+              <ShortenUrlList data={myShortenUrls} />
+            )}
           </div>
         </div>
       )}
 
       <ShortenPopUp
-      refetch={refetch}
+        refetch={refetch}
         open={shortenPopUp}
         setOpen={setShortenPopUp}
       />
     </div>
   );
-}
+};
+
+export default DashboardLayout;

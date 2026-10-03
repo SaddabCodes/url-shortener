@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import "./App.css";
 import AboutPage from "./components/AboutPage";
 import DashboardLayout from "./components/Dashboard/DashboardLayout";
+import ErrorPage from "./components/ErrorPage";
 import Footer from "./components/Footer";
 import LandingPage from "./components/LandingPage";
 import LoginPage from "./components/LoginPage";
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<DashboardLayout />} />
+          <Route path="/error" element={<ErrorPage />} />
         </Routes>
         <Footer />
       </Router>
