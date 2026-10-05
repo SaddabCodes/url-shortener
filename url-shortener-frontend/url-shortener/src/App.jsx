@@ -10,6 +10,7 @@ import LandingPage from "./components/LandingPage";
 import LoginPage from "./components/LoginPage";
 import Navbar from "./components/Navbar";
 import RegisterPage from "./components/RegisterPage";
+import ShortUrlRedirect from "./components/ShortUrlRedirect";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<DashboardLayout />} />
+          <Route path="/s/:shortUrl" element={<ShortUrlRedirect />} />
           <Route path="/error" element={<ErrorPage />} />
         </Routes>
         <Footer />

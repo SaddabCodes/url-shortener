@@ -23,7 +23,8 @@ export const useFetchMyShortUrls = (token, onError) => {
         return sortedData;
       },
       onError,
-      staleTime: 5000,
+      staleTime: 0,
+      refetchOnWindowFocus: true,
       enabled: Boolean(token),
     },
   );

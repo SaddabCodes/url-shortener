@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
+import CopyToClipboard from "react-copy-to-clipboard";
 import { FaExternalLinkAlt, FaRegCalendarAlt } from "react-icons/fa";
 import { IoCopy } from "react-icons/io5";
 import { LiaCheckSolid } from "react-icons/lia";
 import { MdAnalytics, MdOutlineAdsClick } from "react-icons/md";
-import api from "../../api/api";
+import { Hourglass } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/api";
 import { useStoreContext } from "../../contextApi/ContextApi";
 import Graph from "./Graph";
 
@@ -14,26 +17,29 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [analyticToggle, setAnalyticToggle] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [selectedUrl, setSelectedUrl] = useState("");
   const [analyticsData, setAnalyticsData] = useState([]);
 
   const frontEndUrl = import.meta.env.VITE_REACT_SUBDOMAIN;
-  const subDomain = frontEndUrl.replace(
-    /^https?:\/\//,
-    "",
-  );
+  const subDomain = frontEndUrl.replace(/^https?:\/\//, "");
 
   const analyticsHandler = (shortUrl) => {
     if (!analyticToggle) {
-      fetchMyShortUrl(shortUrl);
+      setSelectedUrl(shortUrl);
     }
     setAnalyticToggle(!analyticToggle);
   };
 
-  const fetchMyShortUrl = async (url) => {
+  const fetchMyShortUrl = async () => {
     setLoader(true);
     try {
+      const endDate = dayjs().endOf("day").format("YYYY-MM-DDTHH:mm:ss");
+      const startDate = dayjs()
+        .subtract(30, "day")
+        .startOf("day")
+        .format("YYYY-MM-DDTHH:mm:ss");
       const { data } = await api.get(
-        `/api/urls/analytics/${url}?startDate=2024-12-01T00:00:00&endDate=2025-12-31T23:59:59`,
+        `/api/urls/analytics/${selectedUrl}?startDate=${startDate}&endDate=${endDate}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -43,6 +49,7 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
         },
       );
       setAnalyticsData(data);
+      setSelectedUrl("");
       console.log(data);
     } catch (error) {
       navigate("/error");
@@ -51,6 +58,12 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
       setLoader(false);
     }
   };
+
+  useEffect( () => {
+    if (selectedUrl) {
+      fetchMyShortUrl();
+    }
+  }, [selectedUrl]);
 
   return (
     <div
@@ -70,9 +83,7 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
             <Link
               target="_"
               className="text-[17px]  font-montserrat font-[600] text-linkColor"
-              to={
-                frontEndUrl + "/s/" + `${shortUrl}`
-              }
+              to={frontEndUrl + "/s/" + `${shortUrl}`}
             >
               {subDomain + "/s/" + `${shortUrl}`}
             </Link>
@@ -101,28 +112,26 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
                 <FaRegCalendarAlt />
               </span>
               <span className="text-[17px]">
-                {new Date(createdDate).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "2-digit",
-                  year: "numeric",
-                })}
+                {dayjs(createdDate).format("MMM DD, YYYY")}
               </span>
             </div>
           </div>
         </div>
 
         <div className="flex  flex-1  sm:justify-end items-center gap-4">
-          <button
-            type="button"
-            onClick={() => {
-              navigator.clipboard.writeText(`${frontEndUrl}/s/${shortUrl}`);
-              setIsCopied(true);
-            }}
-            className="flex cursor-pointer gap-1 items-center bg-btnColor py-2 font-semibold shadow-md shadow-slate-500 px-6 rounded-md text-white"
+          <CopyToClipboard
+            onCopy={() => setIsCopied(true)}
+            text={`${frontEndUrl}/s/${shortUrl}`}
           >
-            {isCopied ? "Copied" : "Copy"}
-            {isCopied ? <LiaCheckSolid className="text-md" /> : <IoCopy className="text-md" />}
-          </button>
+            <div className="flex cursor-pointer gap-1 items-center bg-btnColor py-2  font-semibold shadow-md shadow-slate-500 px-6 rounded-md text-white ">
+              <button className="">{isCopied ? "Copied" : "Copy"}</button>
+              {isCopied ? (
+                <LiaCheckSolid className="text-md" />
+              ) : (
+                <IoCopy className="text-md" />
+              )}
+            </div>
+          </CopyToClipboard>
 
           <div
             onClick={() => analyticsHandler(shortUrl)}
@@ -142,7 +151,15 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
           {loader ? (
             <div className="min-h-[calc(450px-140px)] flex justify-center items-center w-full">
               <div className="flex flex-col items-center gap-1">
-                <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600" />
+                <Hourglass
+                  visible={true}
+                  height="50"
+                  width="50"
+                  ariaLabel="hourglass-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  colors={["#306cce", "#72a1ed"]}
+                />
                 <p className="text-slate-700">Please Wait...</p>
               </div>
             </div>

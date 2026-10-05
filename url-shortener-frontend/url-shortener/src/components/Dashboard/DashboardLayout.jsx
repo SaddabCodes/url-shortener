@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Graph from "./Graph";
 import { dummyData } from "../../dummyData/data";
 import { useStoreContext } from "../../contextApi/ContextApi";
@@ -22,6 +22,22 @@ const DashboardLayout = () => {
     data: myShortenUrls = [],
     refetch,
   } = useFetchMyShortUrls(token, onError);
+
+  useEffect(() => {
+    const refreshUrls = () => {
+      if (document.visibilityState === "visible") {
+        refetch();
+      }
+    };
+
+    window.addEventListener("focus", refreshUrls);
+    document.addEventListener("visibilitychange", refreshUrls);
+
+    return () => {
+      window.removeEventListener("focus", refreshUrls);
+      document.removeEventListener("visibilitychange", refreshUrls);
+    };
+  }, [refetch]);
 
   const { isLoading: loader, data: totalClicks = [] } = useFetchTotalClicks(
     token,
