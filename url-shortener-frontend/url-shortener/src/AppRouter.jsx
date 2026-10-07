@@ -11,6 +11,7 @@ import LoginPage from "./components/LoginPage";
 import Navbar from "./components/Navbar";
 import RegisterPage from "./components/RegisterPage";
 import ShortUrlRedirect from "./components/ShortUrlRedirect";
+import PrivateRoute from "./PrivateRoute";
 import ShortenUrlPage from "./ShortenUrlPage";
 
 export default function AppRouter() {
@@ -21,9 +22,36 @@ export default function AppRouter() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardLayout />} />
+
+        <Route
+          path="/register"
+          element={
+            <PrivateRoute publicPage={true}>
+              {" "}
+              <RegisterPage />{" "}
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/login"
+          element={
+            <PrivateRoute publicPage={true}>
+              {" "}
+              <LoginPage />{" "}
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute publicPage={false}>
+              {" "}
+              <DashboardLayout />{" "}
+            </PrivateRoute>
+          }
+        />
         <Route path="/s/:shortUrl" element={<ShortUrlRedirect />} />
         <Route path="/error" element={<ErrorPage />} />
       </Routes>
