@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { FaExternalLinkAlt, FaRegCalendarAlt } from "react-icons/fa";
 import { IoCopy } from "react-icons/io5";
@@ -17,7 +17,6 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [analyticToggle, setAnalyticToggle] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [selectedUrl, setSelectedUrl] = useState("");
   const [analyticsData, setAnalyticsData] = useState([]);
 
   const frontEndUrl = import.meta.env.VITE_REACT_SUBDOMAIN;
@@ -25,12 +24,12 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
 
   const analyticsHandler = (shortUrl) => {
     if (!analyticToggle) {
-      setSelectedUrl(shortUrl);
+      fetchMyShortUrl(shortUrl);
     }
     setAnalyticToggle(!analyticToggle);
   };
 
-  const fetchMyShortUrl = async () => {
+  const fetchMyShortUrl = async (shortUrl) => {
     setLoader(true);
     try {
       const endDate = dayjs().endOf("day").format("YYYY-MM-DDTHH:mm:ss");
@@ -39,7 +38,7 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
         .startOf("day")
         .format("YYYY-MM-DDTHH:mm:ss");
       const { data } = await api.get(
-        `/api/urls/analytics/${selectedUrl}?startDate=${startDate}&endDate=${endDate}`,
+        `/api/urls/analytics/${shortUrl}?startDate=${startDate}&endDate=${endDate}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -49,7 +48,6 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
         },
       );
       setAnalyticsData(data);
-      setSelectedUrl("");
       console.log(data);
     } catch (error) {
       navigate("/error");
@@ -58,12 +56,6 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
       setLoader(false);
     }
   };
-
-  useEffect( () => {
-    if (selectedUrl) {
-      fetchMyShortUrl();
-    }
-  }, [selectedUrl]);
 
   return (
     <div
@@ -83,9 +75,9 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
             <Link
               target="_"
               className="text-[17px]  font-montserrat font-[600] text-linkColor"
-              to={frontEndUrl + "/s/" + `${shortUrl}`}
+              to={`${frontEndUrl}/${shortUrl}`}
             >
-              {subDomain + "/s/" + `${shortUrl}`}
+              {subDomain + "/" + `${shortUrl}`}
             </Link>
             <FaExternalLinkAlt className="text-linkColor" />
           </div>
@@ -121,7 +113,7 @@ const ShortenItem = ({ originalUrl, shortUrl, clickCount, createdDate }) => {
         <div className="flex  flex-1  sm:justify-end items-center gap-4">
           <CopyToClipboard
             onCopy={() => setIsCopied(true)}
-            text={`${frontEndUrl}/s/${shortUrl}`}
+            text={`${frontEndUrl}/${shortUrl}`}
           >
             <div className="flex cursor-pointer gap-1 items-center bg-btnColor py-2  font-semibold shadow-md shadow-slate-500 px-6 rounded-md text-white ">
               <button className="">{isCopied ? "Copied" : "Copy"}</button>
