@@ -3,17 +3,17 @@ spring:
     name: url-shortener
 
   datasource:
-    url: jdbc:mysql://localhost:3306/url_shortener
-    username: root
-    password: 1234
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
 
   jwt:
-    secret: b603fafc39f3dd71bb0e4ef7feeada87b16f70df8037aca88a4ced01cb229289
-    expiration: 172800000
+    secret: ${JWT_SECRET}
+    expiration: ${JWT_EXPIRATION}
 
   frontend:
-    url: http://localhost:5173
+    url: ${FRONTEND_URL}
