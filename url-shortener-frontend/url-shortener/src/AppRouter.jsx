@@ -52,8 +52,10 @@ export default function AppRouter() {
             </PrivateRoute>
           }
         />
+
+        <Route path="*" element={<ErrorPage message="We can't seem to find the page you're looking for "  />} />
+
         <Route path="/s/:shortUrl" element={<ShortUrlRedirect />} />
-        <Route path="/error" element={<ErrorPage />} />
       </Routes>
       <Footer />
     </Router>
